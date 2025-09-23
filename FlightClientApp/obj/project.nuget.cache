@@ -1,0 +1,66 @@
+{
+  "version": 2,
+  "dgSpecHash": "qVEsQg07Q4Q=",
+  "success": true,
+  "projectFilePath": "/Users/wifiter/Documents/Test asp.net/FlightClientApp/FlightClientApp.csproj",
+  "expectedPackageFiles": [
+    "/Users/wifiter/.nuget/packages/humanizer.core/2.14.1/humanizer.core.2.14.1.nupkg.sha512",
+    "/Users/wifiter/.nuget/packages/microsoft.aspnetcore.jsonpatch/7.0.0/microsoft.aspnetcore.jsonpatch.7.0.0.nupkg.sha512",
+    "/Users/wifiter/.nuget/packages/microsoft.aspnetcore.mvc.newtonsoftjson/7.0.0/microsoft.aspnetcore.mvc.newtonsoftjson.7.0.0.nupkg.sha512",
+    "/Users/wifiter/.nuget/packages/microsoft.csharp/4.7.0/microsoft.csharp.4.7.0.nupkg.sha512",
+    "/Users/wifiter/.nuget/packages/microsoft.entityframeworkcore/7.0.0/microsoft.entityframeworkcore.7.0.0.nupkg.sha512",
+    "/Users/wifiter/.nuget/packages/microsoft.entityframeworkcore.abstractions/7.0.0/microsoft.entityframeworkcore.abstractions.7.0.0.nupkg.sha512",
+    "/Users/wifiter/.nuget/packages/microsoft.entityframeworkcore.analyzers/7.0.0/microsoft.entityframeworkcore.analyzers.7.0.0.nupkg.sha512",
+    "/Users/wifiter/.nuget/packages/microsoft.entityframeworkcore.design/7.0.0/microsoft.entityframeworkcore.design.7.0.0.nupkg.sha512",
+    "/Users/wifiter/.nuget/packages/microsoft.entityframeworkcore.relational/7.0.0/microsoft.entityframeworkcore.relational.7.0.0.nupkg.sha512",
+    "/Users/wifiter/.nuget/packages/microsoft.extensions.apidescription.server/6.0.5/microsoft.extensions.apidescription.server.6.0.5.nupkg.sha512",
+    "/Users/wifiter/.nuget/packages/microsoft.extensions.caching.abstractions/7.0.0/microsoft.extensions.caching.abstractions.7.0.0.nupkg.sha512",
+    "/Users/wifiter/.nuget/packages/microsoft.extensions.caching.memory/7.0.0/microsoft.extensions.caching.memory.7.0.0.nupkg.sha512",
+    "/Users/wifiter/.nuget/packages/microsoft.extensions.configuration.abstractions/7.0.0/microsoft.extensions.configuration.abstractions.7.0.0.nupkg.sha512",
+    "/Users/wifiter/.nuget/packages/microsoft.extensions.dependencyinjection/7.0.0/microsoft.extensions.dependencyinjection.7.0.0.nupkg.sha512",
+    "/Users/wifiter/.nuget/packages/microsoft.extensions.dependencyinjection.abstractions/8.0.0/microsoft.extensions.dependencyinjection.abstractions.8.0.0.nupkg.sha512",
+    "/Users/wifiter/.nuget/packages/microsoft.extensions.dependencymodel/7.0.0/microsoft.extensions.dependencymodel.7.0.0.nupkg.sha512",
+    "/Users/wifiter/.nuget/packages/microsoft.extensions.logging/7.0.0/microsoft.extensions.logging.7.0.0.nupkg.sha512",
+    "/Users/wifiter/.nuget/packages/microsoft.extensions.logging.abstractions/8.0.0/microsoft.extensions.logging.abstractions.8.0.0.nupkg.sha512",
+    "/Users/wifiter/.nuget/packages/microsoft.extensions.options/7.0.0/microsoft.extensions.options.7.0.0.nupkg.sha512",
+    "/Users/wifiter/.nuget/packages/microsoft.extensions.primitives/7.0.0/microsoft.extensions.primitives.7.0.0.nupkg.sha512",
+    "/Users/wifiter/.nuget/packages/microsoft.openapi/1.6.14/microsoft.openapi.1.6.14.nupkg.sha512",
+    "/Users/wifiter/.nuget/packages/mono.texttemplating/2.2.1/mono.texttemplating.2.2.1.nupkg.sha512",
+    "/Users/wifiter/.nuget/packages/newtonsoft.json/13.0.1/newtonsoft.json.13.0.1.nupkg.sha512",
+    "/Users/wifiter/.nuget/packages/newtonsoft.json.bson/1.0.2/newtonsoft.json.bson.1.0.2.nupkg.sha512",
+    "/Users/wifiter/.nuget/packages/npgsql/8.0.0/npgsql.8.0.0.nupkg.sha512",
+    "/Users/wifiter/.nuget/packages/swashbuckle.aspnetcore/6.6.1/swashbuckle.aspnetcore.6.6.1.nupkg.sha512",
+    "/Users/wifiter/.nuget/packages/swashbuckle.aspnetcore.swagger/6.6.1/swashbuckle.aspnetcore.swagger.6.6.1.nupkg.sha512",
+    "/Users/wifiter/.nuget/packages/swashbuckle.aspnetcore.swaggergen/6.6.1/swashbuckle.aspnetcore.swaggergen.6.6.1.nupkg.sha512",
+    "/Users/wifiter/.nuget/packages/swashbuckle.aspnetcore.swaggerui/6.6.1/swashbuckle.aspnetcore.swaggerui.6.6.1.nupkg.sha512",
+    "/Users/wifiter/.nuget/packages/system.codedom/4.4.0/system.codedom.4.4.0.nupkg.sha512",
+    "/Users/wifiter/.nuget/packages/system.text.encodings.web/7.0.0/system.text.encodings.web.7.0.0.nupkg.sha512",
+    "/Users/wifiter/.nuget/packages/system.text.json/7.0.0/system.text.json.7.0.0.nupkg.sha512"
+  ],
+  "logs": [
+    {
+      "code": "NU1603",
+      "level": "Warning",
+      "message": "FlightClientApp depends on Npgsql (>= 7.1.2) but Npgsql 7.1.2 was not found. Npgsql 8.0.0 was resolved instead.",
+      "projectPath": "/Users/wifiter/Documents/Test asp.net/FlightClientApp/FlightClientApp.csproj",
+      "warningLevel": 1,
+      "filePath": "/Users/wifiter/Documents/Test asp.net/FlightClientApp/FlightClientApp.csproj",
+      "libraryId": "Npgsql",
+      "targetGraphs": [
+        "net9.0"
+      ]
+    },
+    {
+      "code": "NU1903",
+      "level": "Warning",
+      "message": "Package 'Npgsql' 8.0.0 has a known high severity vulnerability, https://github.com/advisories/GHSA-x9vc-6hfv-hg8c",
+      "projectPath": "/Users/wifiter/Documents/Test asp.net/FlightClientApp/FlightClientApp.csproj",
+      "warningLevel": 1,
+      "filePath": "/Users/wifiter/Documents/Test asp.net/FlightClientApp/FlightClientApp.csproj",
+      "libraryId": "Npgsql",
+      "targetGraphs": [
+        "net9.0"
+      ]
+    }
+  ]
+}

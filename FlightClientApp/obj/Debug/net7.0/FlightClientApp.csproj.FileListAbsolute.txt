@@ -1,0 +1,10 @@
+/Users/wifiter/Documents/Test asp.net/FlightClientApp/obj/Debug/net7.0/FlightClientApp.csproj.AssemblyReference.cache
+/Users/wifiter/Documents/Test asp.net/FlightClientApp/obj/Debug/net7.0/rpswa.dswa.cache.json
+/Users/wifiter/Documents/Test asp.net/FlightClientApp/obj/Debug/net7.0/FlightClientApp.GeneratedMSBuildEditorConfig.editorconfig
+/Users/wifiter/Documents/Test asp.net/FlightClientApp/obj/Debug/net7.0/FlightClientApp.AssemblyInfoInputs.cache
+/Users/wifiter/Documents/Test asp.net/FlightClientApp/obj/Debug/net7.0/FlightClientApp.AssemblyInfo.cs
+/Users/wifiter/Documents/Test asp.net/FlightClientApp/obj/Debug/net7.0/FlightClientApp.csproj.CoreCompileInputs.cache
+/Users/wifiter/Documents/Test asp.net/FlightClientApp/obj/Debug/net7.0/FlightClientApp.MvcApplicationPartsAssemblyInfo.cs
+/Users/wifiter/Documents/Test asp.net/FlightClientApp/obj/Debug/net7.0/FlightClientApp.MvcApplicationPartsAssemblyInfo.cache
+/Users/wifiter/Documents/Test asp.net/FlightClientApp/obj/Debug/net7.0/FlightClientApp.RazorAssemblyInfo.cache
+/Users/wifiter/Documents/Test asp.net/FlightClientApp/obj/Debug/net7.0/FlightClientApp.RazorAssemblyInfo.cs
