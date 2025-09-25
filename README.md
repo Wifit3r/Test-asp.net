@@ -143,13 +143,13 @@ FlightInformationSystem/
 │   │   └── FlightRepository.cs
 │   ├── Services/
 │   │   └── FlightService.cs
+|   ├── server.sql  
 │   └── Program.cs
 ├── FlightClientApp/               # Web UI
 │   ├── Pages/
 │   │   └── Flights.cshtml
 │   │   └── FlightsModel.cs
-│   └── Program.cs
-├── database-setup.sql             # SQL скрипт БД
+│   └── Program.cs          
 └── README.md
 ```
 
