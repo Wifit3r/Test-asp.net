@@ -1,4 +1,128 @@
-@page
-@model FlightClientApp.Pages.IndexModel
-<h1>Вітаємо у FlightClientApp</h1>
-<p><a href="/Flights">Перейти до пошуку рейсів</a></p>
+@page "/Flights"
+@model FlightStorageService.Pages.FlightsModel
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Пошук рейсів";
+}
+
+<div class="container my-5">
+    <h2 class="mb-4">Пошук рейсів</h2>
+
+    <div class="mb-4">
+        <div class="btn-group" role="group" aria-label="Toggle search mode">
+            <button id="switch-params" type="button" class="btn btn-primary active">За параметрами</button>
+            <button id="switch-number" type="button" class="btn btn-outline-secondary">За номером</button>
+        </div>
+    </div>
+
+    <form id="form-params" method="get" class="mb-4" style="display: grid;">
+        <div class="row g-3 align-items-end">
+            <div class="col-12 col-md-3">
+                <label for="Date" class="form-label">Дата</label>
+                <input required type="date" name="Date" asp-for="Date" class="form-control" id="Date" />
+            </div>
+            <div class="col-12 col-md-3">
+                <label for="ArrivalCity" class="form-label">Місто прибуття</label>
+                <input type="text" name="ArrivalCity" asp-for="ArrivalCity" class="form-control" id="ArrivalCity" placeholder="Наприклад, Perechyn" />
+            </div>
+
+            <div class="col-12 col-md-3">
+                <label for="DepartureCity" class="form-label">Місто відправлення</label>
+                <input type="text" name="DepartureCity" asp-for="DepartureCity" class="form-control" id="DepartureCity" placeholder="Наприклад, Rome" />
+            </div>
+
+            <div class="col-12 col-md-3">
+                <button type="submit" class="btn btn-primary w-100">Шукати</button>
+            </div>
+        </div>
+    </form>
+
+    <div id="form-number-container" class="mb-4" style="display:none;">
+        <h3 class="mb-3">Пошук рейсу за номером</h3>
+        <form id="form-number" method="get" >
+            <div class="row g-3 align-items-end">
+                <div class="col-12 col-md-4">
+                    <label for="FlightNumber" class="form-label">Номер рейсу</label>
+                    <input type="text" name="FlightNumber" asp-for="FlightNumber" class="form-control" id="FlightNumber" placeholder="Наприклад, AB123" />
+                </div>
+                <div class="col-12 col-md-auto">
+                    <button type="submit" class="btn btn-primary">Знайти</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <hr/>
+
+    @if (Model.Flights != null && Model.Flights.Count > 0)
+    {
+        <h3 class="mb-3">Знайдені рейси</h3>
+        <div class="table-responsive">
+            <table class="table table-striped table-hover table-bordered">
+                <thead class="table-dark">
+                    <tr>
+                        <th scope="col">Номер рейсу</th>
+                        <th scope="col">Дата та час відправлення</th>
+                        <th scope="col">Місто відправлення</th>
+                        <th scope="col">Місто прибуття</th>
+                        <th scope="col">Тривалість (хв)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var flight in Model.Flights)
+                    {
+                        <tr>
+                            <td>@flight.FlightNumber</td>
+                            <td>@flight.DepartureDateTime.ToString("yyyy-MM-dd HH:mm")</td>
+                            <td>@flight.DepartureAirportCity</td>
+                            <td>@flight.ArrivalAirportCity</td>
+                            <td>@flight.DurationMinutes</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else if (Model.Flights != null && Model.Date.HasValue)
+    {
+        <div class="alert alert-warning mt-3" role="alert">
+            Рейси не знайдено за заданими критеріями.
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const btnParams = document.getElementById("switch-params");
+            const btnNumber = document.getElementById("switch-number");
+
+            const formParams = document.getElementById("form-params");
+            const formNumber = document.getElementById("form-number-container");
+
+            btnParams.addEventListener("click", function () {
+                formParams.style.display = "grid";
+                formNumber.style.display = "none";
+
+                btnParams.classList.add("btn-primary");
+                btnParams.classList.remove("btn-outline-secondary");
+                btnParams.classList.add("active");
+
+                btnNumber.classList.remove("btn-primary", "active");
+                btnNumber.classList.add("btn-outline-secondary");
+            });
+
+            btnNumber.addEventListener("click", function () {
+                formParams.style.display = "none";
+                formNumber.style.display = "block";
+
+                btnNumber.classList.add("btn-primary");
+                btnNumber.classList.remove("btn-outline-secondary");
+                btnNumber.classList.add("active");
+
+                btnParams.classList.remove("btn-primary", "active");
+                btnParams.classList.add("btn-outline-secondary");
+            });
+        });
+    </script>
+}

@@ -17,9 +17,10 @@ namespace FlightStorageService
             _flightRepository = flightRepository;
         }
 
-        [HttpGet("{flightNumber}")]
-        public async Task<ActionResult<Flight>> GetByNumber(string flightNumber)
+        [HttpGet("{FlightNumber}")]
+        public async Task<ActionResult<Flight>> GetByNumber([FromQuery]string FlightNumber)
         {
+            var flightNumber = FlightNumber;
             var result = await _flightRepository.GetByNumberAsync(flightNumber);
             if (result == null) return NotFound();
             return Ok(result);

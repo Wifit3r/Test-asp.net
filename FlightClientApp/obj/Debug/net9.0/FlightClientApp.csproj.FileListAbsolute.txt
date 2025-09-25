@@ -47,3 +47,5 @@
 /Users/wifiter/Documents/Test asp.net/FlightClientApp/obj/Debug/net9.0/FlightClientApp.pdb
 /Users/wifiter/Documents/Test asp.net/FlightClientApp/obj/Debug/net9.0/FlightClientApp.genruntimeconfig.cache
 /Users/wifiter/Documents/Test asp.net/FlightClientApp/obj/Debug/net9.0/ref/FlightClientApp.dll
+/Users/wifiter/Documents/Test asp.net/FlightClientApp/bin/Debug/net9.0/package-lock.json
+/Users/wifiter/Documents/Test asp.net/FlightClientApp/bin/Debug/net9.0/package.json

@@ -1,4 +1,3 @@
-
 CREATE TABLE IF NOT EXISTS flights (
     flight_number VARCHAR(10) PRIMARY KEY,
     departure_date_time TIMESTAMP WITH TIME ZONE NOT NULL,
@@ -6,7 +5,6 @@ CREATE TABLE IF NOT EXISTS flights (
     arrival_airport_city VARCHAR(100) NOT NULL,
     duration_minutes INTEGER NOT NULL
 );
-
 
 CREATE OR REPLACE FUNCTION add_flight(
     _flight_number VARCHAR(10),
@@ -19,7 +17,6 @@ RETURNS VOID
 LANGUAGE plpgsql
 AS $$
 BEGIN
-    
     IF _departure_date_time BETWEEN NOW()::date AND (NOW()::date + INTERVAL '7 days') THEN
         INSERT INTO flights (
             flight_number,
@@ -52,7 +49,8 @@ LANGUAGE plpgsql
 AS $$
 BEGIN
     RETURN QUERY
-    SELECT f.* FROM flights AS f WHERE f.flight_number = _flight_number;
+    SELECT f.* FROM flights AS f 
+    WHERE f.flight_number = _flight_number;
 END;
 $$;
 
@@ -68,7 +66,10 @@ LANGUAGE plpgsql
 AS $$
 BEGIN
     RETURN QUERY
-    SELECT f.* FROM flights AS f WHERE DATE(f.departure_date_time) = _date;
+    SELECT f.* 
+    FROM flights AS f 
+    WHERE f.departure_date_time >= _date::timestamptz
+      AND f.departure_date_time < (_date::timestamptz + INTERVAL '1 day');
 END;
 $$;
 
@@ -87,10 +88,11 @@ LANGUAGE plpgsql
 AS $$
 BEGIN
     RETURN QUERY
-    SELECT f.* FROM flights AS f
-    WHERE
-        f.departure_airport_city ILIKE _city AND
-        DATE(f.departure_date_time) = _date;
+    SELECT f.* 
+    FROM flights AS f
+    WHERE f.departure_airport_city ILIKE _city
+      AND f.departure_date_time >= _date::timestamptz
+      AND f.departure_date_time < (_date::timestamptz + INTERVAL '1 day');
 END;
 $$;
 
@@ -109,9 +111,10 @@ LANGUAGE plpgsql
 AS $$
 BEGIN
     RETURN QUERY
-    SELECT f.* FROM flights AS f
-    WHERE
-        f.arrival_airport_city ILIKE _city AND
-        DATE(f.departure_date_time) = _date;
+    SELECT f.* 
+    FROM flights AS f
+    WHERE f.arrival_airport_city ILIKE _city
+      AND f.departure_date_time >= _date::timestamptz
+      AND f.departure_date_time < (_date::timestamptz + INTERVAL '1 day');
 END;
 $$;
