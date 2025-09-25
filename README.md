@@ -8,8 +8,8 @@
 
 - **.NET 9** (C#)
 - **ASP.NET Core Web API** / **Razor Pages**
-- **MS SQL Server**
-- **ADO.NET** (без ORM)
+- **PostgreSQL**
+- **ADO.NET** з **Npgsql** (без ORM)
 - **Bootstrap** для UI
 - **Swagger** для документації API
 
@@ -17,15 +17,25 @@
 
 ### 1. Підготовка бази даних
 
-1. Запустіть **MS SQL Server** (локально або в Docker)
-2. Виконайте SQL-скрипт для створення бази даних та збережених процедур:
+1. Запустіть **PostgreSQL** (локально або в Docker)
+2. Створіть базу даних `FlightsDb`:
 
 ```bash
-# Знайдіть файл database-setup.sql в корені проекту
-sqlcmd -S localhost -E -i database-setup.sql
+# Підключіться до PostgreSQL
+psql -U postgres
+
+# Створіть базу даних
+CREATE DATABASE "FlightsDb";
+
+# Підключіться до нової бази
+\c "FlightsDb"
+
+# Виконайте скрипт створення функцій
+\i database-setup.sql
 ```
 
-Або через **SQL Server Management Studio**:
+Або через **pgAdmin**:
+- Створіть нову базу даних `FlightsDb`
 - Відкрийте файл `database-setup.sql`
 - Виконайте скрипт
 
@@ -75,9 +85,13 @@ Web додаток буде доступний на: `http://localhost:5000`
 Для тестування додайте кілька рейсів через API або SQL:
 
 ```sql
-EXEC AddFlight 'AB123', '2025-09-27 10:30:00', 'Rome', 'Perechyn', 120;
-EXEC AddFlight 'CD456', '2025-09-27 14:15:00', 'Perechyn', 'Warsaw', 90;
-EXEC AddFlight 'EF789', '2025-09-28 08:00:00', 'Kyiv', 'London', 180;
+-- Підключіться до бази FlightsDb
+\c "FlightsDb"
+
+-- Додайте тестові рейси
+SELECT add_flight('AB123', '2025-09-27 10:30:00', 'Rome', 'Perechyn', 120);
+SELECT add_flight('CD456', '2025-09-27 14:15:00', 'Perechyn', 'Warsaw', 90);
+SELECT add_flight('EF789', '2025-09-28 08:00:00', 'Kyiv', 'London', 180);
 ```
 
 ## 📊 API Endpoints
@@ -88,7 +102,6 @@ EXEC AddFlight 'EF789', '2025-09-28 08:00:00', 'Kyiv', 'London', 180;
 | `GET` | `/api/flights?date={yyyy-MM-dd}` | Всі рейси на задану дату |
 | `GET` | `/api/flights/departure?city={city}&date={yyyy-MM-dd}` | Рейси з міста вильоту |
 | `GET` | `/api/flights/arrival?city={city}&date={yyyy-MM-dd}` | Рейси до міста прильоту |
-| `POST`|
 
 ### Приклади запитів:
 
@@ -130,13 +143,13 @@ FlightInformationSystem/
 │   │   └── FlightRepository.cs
 │   ├── Services/
 │   │   └── FlightService.cs
-│   ├── server.sql   
 │   └── Program.cs
 ├── FlightClientApp/               # Web UI
 │   ├── Pages/
 │   │   └── Flights.cshtml
 │   │   └── FlightsModel.cs
-│   └── Program.cs        
+│   └── Program.cs
+├── database-setup.sql             # SQL скрипт БД
 └── README.md
 ```
 
@@ -144,17 +157,19 @@ FlightInformationSystem/
 
 ### Docker (опціонально)
 
-Якщо у вас є Docker, можете запустити SQL Server в контейнері:
+Якщо у вас є Docker, можете запустити PostgreSQL в контейнері:
 
 ```bash
-docker run -e "ACCEPT_EULA=Y" -e "MSSQL_SA_PASSWORD=YourPassword123!" \
-           -p 1433:1433 --name sqlserver \
-           mcr.microsoft.com/mssql/server:2022-latest
+docker run --name postgres-flights \
+           -e POSTGRES_PASSWORD=mypassword \
+           -e POSTGRES_DB=FlightsDb \
+           -p 5432:5432 \
+           postgres:15
 ```
 
 І змінити connection string:
 ```json
-"DefaultConnection": "Server=localhost,1433;Database=FlightsDb;User Id=sa;Password=YourPassword123!;TrustServerCertificate=true;"
+"DefaultConnection": "Host=localhost;Port=5432;Database=FlightsDb;Username=postgres;Password=mypassword"
 ```
 
 ### Порти
@@ -168,9 +183,10 @@ docker run -e "ACCEPT_EULA=Y" -e "MSSQL_SA_PASSWORD=YourPassword123!" \
 ## 🐛 Вирішення проблем
 
 ### Помилка підключення до БД
-- Перевірте, чи запущений SQL Server
+- Перевірте, чи запущений PostgreSQL
 - Перевірте connection string
 - Переконайтеся, що база `FlightsDb` створена
+- Перевірте правильність username/password
 
 ### API недоступне
 - Перевірте, чи запущений FlightStorageService
@@ -190,8 +206,8 @@ dotnet test
 ## 📝 Обмеження
 
 - Дані доступні лише на **найближчі 7 днів** від поточної дати
-- Всі SQL операції виконуються через **збережені процедури**
-- Використовується тільки **ADO.NET** (без ORM)
+- Всі SQL операції виконуються через **PostgreSQL функції**
+- Використовується тільки **ADO.NET з Npgsql** (без ORM)
 
 ## 👨‍💻 Автор
 
