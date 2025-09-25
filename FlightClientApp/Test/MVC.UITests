@@ -1,0 +1,314 @@
+using Microsoft.AspNetCore.Mvc.Testing;
+using System.Net;
+using System.Text;
+using Xunit;
+using Microsoft.Extensions.DependencyInjection;
+using System.Net.Http;
+using Moq;
+using Moq.Protected;
+using System.Threading;
+
+namespace FlightClientApp.Tests
+{
+    public class FlightPagesIntegrationTests : IClassFixture<WebApplicationFactory<Program>>
+    {
+        private readonly WebApplicationFactory<Program> _factory;
+        private readonly HttpClient _client;
+
+        public FlightPagesIntegrationTests(WebApplicationFactory<Program> factory)
+        {
+            _factory = factory;
+            _client = factory.CreateClient();
+        }
+
+        [Fact]
+        public async Task FlightsPage_Get_ReturnsSuccessAndCorrectContentType()
+        {
+            // Act
+            var response = await _client.GetAsync("/Flights");
+
+            // Assert
+            response.EnsureSuccessStatusCode();
+            Assert.Equal("text/html; charset=utf-8", response.Content.Headers.ContentType?.ToString());
+
+            var content = await response.Content.ReadAsStringAsync();
+            Assert.Contains("Пошук рейсів", content);
+            Assert.Contains("switch-number", content);
+            Assert.Contains("switch-date", content);
+        }
+
+        [Fact]
+        public async Task FlightsPage_ContainsAllRequiredForms()
+        {
+            // Act
+            var response = await _client.GetAsync("/Flights");
+            var content = await response.Content.ReadAsStringAsync();
+
+            // Assert
+            Assert.Contains("form-number-container", content);
+            Assert.Contains("form-date-container", content);
+            Assert.Contains("form-departure-container", content);
+            Assert.Contains("form-arrival-container", content);
+        }
+
+        [Fact]
+        public async Task FlightsPage_ContainsCorrectJavaScript()
+        {
+            // Act
+            var response = await _client.GetAsync("/Flights");
+            var content = await response.Content.ReadAsStringAsync();
+
+            // Assert
+            Assert.Contains("switch-number", content);
+            Assert.Contains("switch-date", content);
+            Assert.Contains("switch-departure", content);
+            Assert.Contains("switch-arrival", content);
+            Assert.Contains("addEventListener", content);
+        }
+
+        [Theory]
+        [InlineData("/Flights")]
+        [InlineData("/Flights?FlightNumber=AB123")]
+        [InlineData("/Flights?Date=2025-09-27")]
+        public async Task FlightsPage_WithDifferentParameters_ReturnsSuccess(string url)
+        {
+            // Act
+            var response = await _client.GetAsync(url);
+
+            // Assert
+            response.EnsureSuccessStatusCode();
+        }
+
+        [Fact]
+        public async Task FlightsPage_SearchByNumber_ReturnsCorrectHandler()
+        {
+            // Act
+            var response = await _client.GetAsync("/Flights?handler=SearchByNumber&FlightNumber=AB123");
+
+            // Assert
+            response.EnsureSuccessStatusCode();
+            
+            var content = await response.Content.ReadAsStringAsync();
+            // Перевіряємо, що сторінка завантажилася без помилок
+            Assert.Contains("Пошук рейсів", content);
+        }
+
+        [Fact]
+        public async Task FlightsPage_SearchByDate_ReturnsCorrectHandler()
+        {
+            // Act
+            var response = await _client.GetAsync("/Flights?handler=SearchByDate&Date=2025-09-27");
+
+            // Assert
+            response.EnsureSuccessStatusCode();
+            
+            var content = await response.Content.ReadAsStringAsync();
+            Assert.Contains("Пошук рейсів", content);
+        }
+
+        [Fact]
+        public async Task FlightsPage_SearchByDeparture_ReturnsCorrectHandler()
+        {
+            // Act
+            var response = await _client.GetAsync("/Flights?handler=SearchByDeparture&DepartureCity=Rome&Date=2025-09-27");
+
+            // Assert
+            response.EnsureSuccessStatusCode();
+            
+            var content = await response.Content.ReadAsStringAsync();
+            Assert.Contains("Пошук рейсів", content);
+        }
+
+        [Fact]
+        public async Task FlightsPage_SearchByArrival_ReturnsCorrectHandler()
+        {
+            // Act
+            var response = await _client.GetAsync("/Flights?handler=SearchByArrival&ArrivalCity=Perechyn&Date=2025-09-27");
+
+            // Assert
+            response.EnsureSuccessStatusCode();
+            
+            var content = await response.Content.ReadAsStringAsync();
+            Assert.Contains("Пошук рейсів", content);
+        }
+
+        [Fact]
+        public async Task FlightsPage_WithInvalidDate_StillReturnsSuccess()
+        {
+            // Act
+            var response = await _client.GetAsync("/Flights?Date=invalid-date");
+
+            // Assert
+            response.EnsureSuccessStatusCode();
+        }
+
+        [Fact]
+        public async Task FlightsPage_WithEmptyParameters_ReturnsSuccess()
+        {
+            // Act
+            var response = await _client.GetAsync("/Flights?FlightNumber=&Date=&DepartureCity=&ArrivalCity=");
+
+            // Assert
+            response.EnsureSuccessStatusCode();
+        }
+
+        [Fact]
+        public async Task FlightsPage_ContainsBootstrapClasses()
+        {
+            // Act
+            var response = await _client.GetAsync("/Flights");
+            var content = await response.Content.ReadAsStringAsync();
+
+            // Assert - перевіряємо наявність Bootstrap класів
+            Assert.Contains("btn-primary", content);
+            Assert.Contains("form-control", content);
+            Assert.Contains("table table-striped", content);
+            Assert.Contains("alert-warning", content);
+            Assert.Contains("container", content);
+        }
+
+        [Fact]
+        public async Task FlightsPage_ContainsCorrectInputTypes()
+        {
+            // Act
+            var response = await _client.GetAsync("/Flights");
+            var content = await response.Content.ReadAsStringAsync();
+
+            // Assert
+            Assert.Contains("type=\"date\"", content);
+            Assert.Contains("type=\"text\"", content);
+            Assert.Contains("placeholder=\"Наприклад, AB123\"", content);
+            Assert.Contains("placeholder=\"Наприклад, Rome\"", content);
+            Assert.Contains("placeholder=\"Наприклад, Perechyn\"", content);
+        }
+
+        [Fact]
+        public async Task FlightsPage_ContainsCorrectLabels()
+        {
+            // Act
+            var response = await _client.GetAsync("/Flights");
+            var content = await response.Content.ReadAsStringAsync();
+
+            // Assert
+            Assert.Contains("Номер рейсу", content);
+            Assert.Contains("Дата", content);
+            Assert.Contains("Місто вильоту", content);
+            Assert.Contains("Місто прильоту", content);
+        }
+    }
+
+    // Тести для перевірки Model Binding
+    public class FlightModelBindingTests : IClassFixture<WebApplicationFactory<Program>>
+    {
+        private readonly WebApplicationFactory<Program> _factory;
+        private readonly HttpClient _client;
+
+        public FlightModelBindingTests(WebApplicationFactory<Program> factory)
+        {
+            _factory = factory;
+            _client = factory.CreateClient();
+        }
+
+        [Theory]
+        [InlineData("AB123")]
+        [InlineData("cd456")]
+        [InlineData("EF-789")]
+        public async Task FlightNumber_WithValidFormat_ShouldBind(string flightNumber)
+        {
+            // Act
+            var response = await _client.GetAsync($"/Flights?handler=SearchByNumber&FlightNumber={flightNumber}");
+
+            // Assert
+            response.EnsureSuccessStatusCode();
+        }
+
+        [Theory]
+        [InlineData("2025-09-27")]
+        [InlineData("2025-12-31")]
+        [InlineData("2025-01-01")]
+        public async Task Date_WithValidFormat_ShouldBind(string date)
+        {
+            // Act
+            var response = await _client.GetAsync($"/Flights?handler=SearchByDate&Date={date}");
+
+            // Assert
+            response.EnsureSuccessStatusCode();
+        }
+
+        [Theory]
+        [InlineData("Rome", "2025-09-27")]
+        [InlineData("London", "2025-09-28")]
+        [InlineData("Київ", "2025-09-29")]
+        public async Task DepartureCity_WithValidData_ShouldBind(string city, string date)
+        {
+            // Act
+            var response = await _client.GetAsync($"/Flights?handler=SearchByDeparture&DepartureCity={Uri.EscapeDataString(city)}&Date={date}");
+
+            // Assert
+            response.EnsureSuccessStatusCode();
+        }
+
+        [Theory]
+        [InlineData("Perechyn", "2025-09-27")]
+        [InlineData("Warsaw", "2025-09-28")]
+        [InlineData("Ужгород", "2025-09-29")]
+        public async Task ArrivalCity_WithValidData_ShouldBind(string city, string date)
+        {
+            // Act
+            var response = await _client.GetAsync($"/Flights?handler=SearchByArrival&ArrivalCity={Uri.EscapeDataString(city)}&Date={date}");
+
+            // Assert
+            response.EnsureSuccessStatusCode();
+        }
+    }
+
+    // Тести для перевірки відображення результатів
+    public class FlightResultsDisplayTests : IClassFixture<WebApplicationFactory<Program>>
+    {
+        private readonly WebApplicationFactory<Program> _factory;
+        private readonly HttpClient _client;
+
+        public FlightResultsDisplayTests(WebApplicationFactory<Program> factory)
+        {
+            _factory = factory;
+            _client = factory.CreateClient();
+        }
+
+        [Fact]
+        public async Task FlightsTable_WhenNoFlights_ShouldNotDisplayTable()
+        {
+            // Act - пошук неіснуючого рейсу
+            var response = await _client.GetAsync("/Flights?handler=SearchByNumber&FlightNumber=NONEXISTENT999");
+            var content = await response.Content.ReadAsStringAsync();
+
+            // Assert - таблиця не повинна відображатися
+            Assert.DoesNotContain("Знайдені рейси", content);
+        }
+
+        [Fact]
+        public async Task FlightsPage_WhenNoSearchPerformed_ShouldNotShowWarning()
+        {
+            // Act
+            var response = await _client.GetAsync("/Flights");
+            var content = await response.Content.ReadAsStringAsync();
+
+            // Assert - попередження не повинно показуватися без пошуку
+            Assert.DoesNotContain("не знайдено", content);
+        }
+
+        [Fact]
+        public async Task FlightsPage_ContainsCorrectTableHeaders()
+        {
+            // Act
+            var response = await _client.GetAsync("/Flights");
+            var content = await response.Content.ReadAsStringAsync();
+
+            // Assert - перевіряємо заголовки таблиці (навіть якщо таблиця прихована)
+            Assert.Contains("Номер рейсу", content);
+            Assert.Contains("Дата та час відправлення", content);
+            Assert.Contains("Місто відправлення", content);
+            Assert.Contains("Місто прибуття", content);
+            Assert.Contains("Тривалість (хв)", content);
+        }
+    }
+}
