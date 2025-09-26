@@ -31,12 +31,12 @@ CREATE DATABASE "FlightsDb";
 \c "FlightsDb"
 
 # Виконайте скрипт створення функцій
-\i database-setup.sql
+\i server.sql
 ```
 
 Або через **pgAdmin**:
 - Створіть нову базу даних `FlightsDb`
-- Відкрийте файл `database-setup.sql`
+- Відкрийте файл `server.sql`
 - Виконайте скрипт
 
 ### 2. Налаштування підключення до БД
